@@ -35,7 +35,7 @@ project/
 ## 🖥️ How to Use
 1. Clone this repository or download the project:
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
+   git clone https://github.com/agalageorge/collapsible_sidebar.git
     Open index.html in any modern web browser.
     Click on the logo placeholder (circle) to upload your image.
     Click the toggle button at the bottom of the sidebar to expand/collapse.
