@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collapsible Sidebar with Logo Upload</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .main_box {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+    }
+
+    .sidebar {
+      position: fixed;
+      height: 100vh;
+      background-color: #141B2D;
+      box-shadow: 0 0 6px rgb(156, 140, 140);
+      transition: width 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    }
+
+    .sidebar-expanded {
+      width: 250px;
+    }
+
+    .sidebar-collapsed {
+      width: 80px;
+    }
+
+    /* Circular logo placeholder */
+    .logo-placeholder {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid grey;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: #666;
+      transition: all 0.3s ease-in-out;
+      margin-bottom: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .logo-placeholder img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    /* Adjust logo size when collapsed */
+    .sidebar-collapsed .logo-placeholder {
+      width: 50px;
+      height: 50px;
+      font-size: 10px;
+    }
+
+    .menu {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .menu li {
+      margin-top: 6px;
+      padding: 14px 20px;
+      list-style: none;
+    }
+
+    .menu a {
+      color: #fff;
+      font-size: 20px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .menu li:hover {
+      border: 1px solid #fff;
+      transition: all 0.3s linear;
+      opacity: 0.6;
+    }
+
+    .menu img {
+      margin-right: 15px;
+      height: 30px;
+      width: 30px;
+    }
+
+    .menu img:hover {
+      border-left: 2px solid white;
+      transition: all 0.2s linear;
+    }
+
+    .sidebar-content {
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .sidebar-collapsed .sidebar-content {
+      opacity: 0;
+    }
+
+    .sidebar-expanded .sidebar-content {
+      opacity: 1;
+    }
+
+    .toggle {
+      position: absolute;
+      bottom: 50px;
+      width: 90%;
+      display: flex;
+      justify-content: center;
+    }
+
+    #toggleButton {
+      background-color: #3B82F6;
+      border: none;
+      border-radius: 15px;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    #toggleButton img {
+      height: 30px;
+      width: 30px;
+    }
+
+    .main_page {
+      margin-left: 250px;
+      flex: 1;
+      height: 100vh;
+      background-color: #f3f4f6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      transition: margin-left 0.3s ease-in-out;
+    }
+
+    .sidebar-collapsed ~ .main_page {
+      margin-left: 80px;
+    }
+
+    .main_page h2 {
+      color: #141B2D;
+      font-size: 24px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .main_page h1 {
+      color: #141B2D;
+      font-size: 32px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .main_page p {
+      color: #374151;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    /* Hide file input */
+    #logoInput {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="main_box">
+    <div class="sidebar sidebar-expanded">
+      <!-- Circular Logo Placeholder -->
+      <div class="logo-placeholder" id="logoPlaceholder">
+        LOGO
+        <img id="logoImage" src="" alt="" style="display:none;">
+      </div>
+      <input type="file" id="logoInput" accept="image/*">
+
+      <!-- Sidebar Menu -->
+      <div class="menu">
+        <ul>
+          <li>
+            <a href="#"><img src="images/menu-ico1.png"><span class="sidebar-content">Home</span></a>
+          </li>
+          <li>
+            <a href="#"><img src="images/menu-ico2.png"><span class="sidebar-content">About Us</span></a>
+          </li>
+          <li>
+            <a href="#"><img src="images/menu-ico3.png"><span class="sidebar-content">Settings</span></a>
+          </li>
+          <li>
+            <a href="#"><img src="images/menu-ico4.png"><span class="sidebar-content">Services</span></a>
+          </li>
+          <li>
+            <a href="#"><img src="images/login-img.png"><span class="sidebar-content">Login</span></a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Toggle Button -->
+      <div class="toggle">
+        <button id="toggleButton">
+          <img id="toggleIcon" src="images/direction-icon-backward.png">
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main_page">
+      <h2>ELEVVO ONE MONTH INTERNSHIP PROGRAMME</h2>
+      <h1>Main Content</h1>
+      <p>Click the logo to upload a custom image. Collapse/expand sidebar with the button.</p>
+    </div>
+  </div>
+
+  <script>
+    const sidebar = document.querySelector('.sidebar');
+    const toggleButton = document.getElementById('toggleButton');
+    const toggleIcon = document.getElementById('toggleIcon');
+    const logoPlaceholder = document.getElementById('logoPlaceholder');
+    const logoInput = document.getElementById('logoInput');
+    const logoImage = document.getElementById('logoImage');
+
+    // Sidebar toggle
+    toggleButton.addEventListener('click', () => {
+      if (sidebar.classList.contains('sidebar-expanded')) {
+        sidebar.classList.remove('sidebar-expanded');
+        sidebar.classList.add('sidebar-collapsed');
+        toggleIcon.src = 'images/direction-icon-forward.png';
+      } else {
+        sidebar.classList.remove('sidebar-collapsed');
+        sidebar.classList.add('sidebar-expanded');
+        toggleIcon.src = 'images/direction-icon-backward.png';
+      }
+    });
+
+    // Logo click → trigger file input
+    logoPlaceholder.addEventListener('click', () => {
+      logoInput.click();
+    });
+
+    // When a file is chosen, update the logo
+    logoInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          logoImage.src = e.target.result;
+          logoImage.style.display = 'block';
+          logoPlaceholder.firstChild.nodeValue = ''; // remove "LOGO" text
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>
